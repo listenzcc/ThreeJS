@@ -11,11 +11,10 @@ init = (
     // - camera: Where to look at the Scene.
 
     // Setup Renderer and add it to the container
-    var renderer = new THREE.WebGLRenderer();
+    // var renderer = new THREE.WebGLRenderer();
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
-    renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.BasicShadowMap;
     container.appendChild(renderer.domElement);
@@ -25,7 +24,7 @@ init = (
 
     // Setup Camera
     var camera = new THREE.PerspectiveCamera(75, 1.0, 0.1, 1000);
-    camera.position.set(5, 5, 5);
+    camera.position.set(20, 20, 20);
 
     // Render an empty Scene
     renderer.render(scene, camera);

@@ -31,7 +31,6 @@ addStats = (Stats, container = document.getElementById("statsContainer")) => {
     var stats = new Stats();
     var dom = stats.dom;
     dom.style.position = "";
-    console.log(dom);
     container.appendChild(stats.dom);
     Globals.stats = stats;
     console.log("Added Stats to scene");
