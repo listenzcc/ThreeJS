@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 
+{% load static %}
+
 <head>
     <title>Title Placeholder</title>
-    <script type="text/javascript" src="node_modules/three/build/three.min.js"></script>
+    <script type="text/javascript" src="{% static 'node_modules/three/build/three.min.js' %}"></script>
     <style>
         canvas {
             width: 100%;
@@ -13,7 +15,6 @@
 
 <body>
     <h2>H2 Placeholder</h2>
-    <script src="js/three.js"></script>
     <script>
         // Part-1
         var scene = new THREE.Scene();
