@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <style type="text/css">
+            div#container {
+                width: 800px;
+                height: 600px;
+                background-color: aqua;
+            }
+
+            div.flex-view {
+                display: flex;
+                justify-content: center;
+            }
+
+            p.custom-p {
+                margin: 0px;
+                font-family: fantasy;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div>
+            <h1>Hi there</h1>
+        </div>
+
+        <div id="container"></div>
+
+        <script type="text/javascript">
+            console.log(d3);
+
+            const str = "Observations";
+
+            let fontSize = 120;
+
+            for (let i = 1; i < 100; i++) {
+                const d = [];
+                for (let j = 0; j < i; j++) {
+                    d.push(j);
+                }
+
+                d3.select("#container")
+                    .append("div")
+                    .attr("class", "flex-view")
+                    .style("transform", "scale(" + 1 / i + ")")
+                    .style("height", fontSize / i + "px")
+                    .selectAll("p")
+                    .data(d)
+                    .enter()
+                    .append("p")
+                    .attr("class", "custom-p")
+                    .text(str)
+                    .style("font-size", (d) => {
+                        return fontSize + "px";
+                    })
+                    .style("margin-right", "0.5em");
+            }
+        </script>
+    </body>
+</html>

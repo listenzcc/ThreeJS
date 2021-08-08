@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+    <head>
+        <title>Example-3</title>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+        />
+        <link rel="stylesheet" href="{% static 'src/css/style.css' %}" />
+        <script
+            type="text/javascript"
+            src="{% static 'src/js/toolbox.js' %}"
+        ></script>
+    </head>
+
+    <body>
+        <div id="titleContainer">
+            <h2>Example-3</h2>
+        </div>
+
+        <div id="widgetContainer">
+            <input
+                id="inp-1"
+                type="range"
+                min="0"
+                max="360"
+                value="0"
+                onchange="angOnChange()"
+            />
+            <input
+                id="inp-2"
+                type="range"
+                min="0"
+                max="360"
+                value="0"
+                onchange="angOnChange()"
+            />
+            <input
+                id="inp-3"
+                type="range"
+                min="0"
+                max="360"
+                value="0"
+                onchange="angOnChange()"
+            />
+            <p id="out-ang">-- | -- | --</p>
+            <p id="out-angTarget">-- | -- | --</p>
+            <script type="text/javascript">
+                angOnChange = () => {
+                    const a1 = document.getElementById("inp-1").value;
+                    const a2 = document.getElementById("inp-2").value;
+                    const a3 = document.getElementById("inp-3").value;
+                    console.log(a1, a2, a3);
+                    Globals.arm1.arcTarget = arc(a1);
+                    Globals.arm2.arcTarget = arc(a2);
+                    // document.getElementById('out-angTarget').innerText = [a1, a2, a3].join(' | ');
+                };
+                angOnChange();
+            </script>
+        </div>
+
+        <div id="statsContainer"></div>
+        <div id="canvasContainer">
+            <script
+                type="text/javascript"
+                src="{% static 'src/js/quickDeploy.js' %}"
+            ></script>
+            <script
+                type="text/javascript"
+                src="{% static 'src-example-3/js/placeObjects.js' %}"
+            ></script>
+            <script
+                type="text/javascript"
+                src="{% static 'src-example-3/js/setupLights.js' %}"
+            ></script>
+            <script
+                type="text/javascript"
+                src="{% static 'src-example-3/js/startLoop.js' %}"
+            ></script>
+
+            <script type="module">
+                import * as THREE from "{% static 'node_modules/three/build/three.module.js' %}";
+                import Stats from "{% static 'node_modules/three/examples/jsm/libs/stats.module.js' %}";
+                import { OrbitControls } from "{% static 'node_modules/three/examples/jsm/controls/OrbitControls.js' %}";
+                import { ShadowMapViewer } from "{% static 'node_modules/three/examples/jsm/utils/ShadowMapViewer.js' %}";
+                quickDeploy(THREE, OrbitControls, Stats);
+                placeObjects(THREE);
+                setupLights(THREE, ShadowMapViewer);
+                startLoop();
+            </script>
+        </div>
+    </body>
+</html>
