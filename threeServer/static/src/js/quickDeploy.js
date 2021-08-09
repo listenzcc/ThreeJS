@@ -10,25 +10,57 @@ Globals.showHelp = true;
 Globals.arm1 = {
     mesh: undefined,
     group: undefined,
-    color: 0xaa0000,
+    color: 0xaa00a0,
     size: [1, 10, 2],
     norm: [0, 1, 0],
     pivot: [0, 0, 0],
     arc: 0,
-    arcTarget: arc(100),
+    arcTarget: arc(0),
     maxOmega: Math.PI,
+    minAng: 0,
+    maxAng: 360,
+    gid: "inp-1",
+    name: "arm-1",
 };
 
 Globals.arm2 = {
     mesh: undefined,
     group: undefined,
-    color: 0x00aa00,
+    color: 0xa0aa00,
     size: [1, 8, 2],
     norm: [1, 0, 0],
     pivot: [0, 10, 0],
     arc: 0,
-    arcTarget: arc(100),
-    maxOmega: Math.PI,
+    arcTarget: arc(0),
+    maxOmega: Math.PI / 2,
+    minAng: 0,
+    maxAng: 90,
+    gid: "inp-2",
+    name: "arm-2",
+};
+
+Globals.arm3 = {
+    mesh: undefined,
+    group: undefined,
+    color: 0x00a0aa,
+    size: [1, 6, 2],
+    norm: [1, 0, 0],
+    pivot: [0, 8, 0],
+    arc: 0,
+    arcTarget: arc(0),
+    maxOmega: Math.PI / 2,
+    minAng: -90,
+    maxAng: 90,
+    gid: "inp-3",
+    name: "arm-3",
+};
+
+Globals.sphere = {
+    mesh: undefined,
+    color: 0xff0000,
+    size: 1,
+    position: [0, 30, 0],
+    namePre: "sphere-",
 };
 
 console.log("Globals object is initialized");
@@ -72,7 +104,7 @@ init = (
 
     // Setup Camera
     var camera = new THREE.PerspectiveCamera(75, 1.0, 0.1, 1000);
-    camera.position.set(20, 20, 20);
+    camera.position.set(40, 80, 40);
 
     // Render an empty Scene
     renderer.render(scene, camera);

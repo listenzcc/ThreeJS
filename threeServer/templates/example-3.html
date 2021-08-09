@@ -15,6 +15,10 @@
             type="text/javascript"
             src="{% static 'src/js/toolbox.js' %}"
         ></script>
+        <script
+            type="text/javascript"
+            src="{% static 'node_modules/d3/d3.v7.min.js' %}"
+        ></script>
     </head>
 
     <body>
@@ -23,44 +27,43 @@
         </div>
 
         <div id="widgetContainer">
-            <input
-                id="inp-1"
-                type="range"
-                min="0"
-                max="360"
-                value="0"
-                onchange="angOnChange()"
-            />
-            <input
-                id="inp-2"
-                type="range"
-                min="0"
-                max="360"
-                value="0"
-                onchange="angOnChange()"
-            />
-            <input
-                id="inp-3"
-                type="range"
-                min="0"
-                max="360"
-                value="0"
-                onchange="angOnChange()"
-            />
-            <p id="out-ang">-- | -- | --</p>
-            <p id="out-angTarget">-- | -- | --</p>
-            <script type="text/javascript">
-                angOnChange = () => {
-                    const a1 = document.getElementById("inp-1").value;
-                    const a2 = document.getElementById("inp-2").value;
-                    const a3 = document.getElementById("inp-3").value;
-                    console.log(a1, a2, a3);
-                    Globals.arm1.arcTarget = arc(a1);
-                    Globals.arm2.arcTarget = arc(a2);
-                    // document.getElementById('out-angTarget').innerText = [a1, a2, a3].join(' | ');
-                };
-                angOnChange();
-            </script>
+            <div>
+                <input id="inp-1" type="range" onchange="angOnChange()" />
+                <input id="inp-2" type="range" onchange="angOnChange()" />
+                <input id="inp-3" type="range" onchange="angOnChange()" />
+                <input type="button" value="Random" onclick="randomAng()" />
+                <p id="out-ang">-- | -- | --</p>
+                <p id="out-angTarget">-- | -- | --</p>
+            </div>
+            <div>
+                <input
+                    id="sphere-x"
+                    min="-10"
+                    max="10"
+                    type="range"
+                    onchange="sphereOnChange()"
+                />
+                <input
+                    id="sphere-y"
+                    min="10"
+                    max="25"
+                    type="range"
+                    onchange="sphereOnChange()"
+                />
+                <input
+                    id="sphere-z"
+                    min="-10"
+                    max="10"
+                    type="range"
+                    onchange="sphereOnChange()"
+                />
+                <input
+                    id="random-sphere-btn"
+                    type="button"
+                    value="Random"
+                    onclick="randomSphere()"
+                />
+            </div>
         </div>
 
         <div id="statsContainer"></div>
@@ -93,5 +96,74 @@
                 startLoop();
             </script>
         </div>
+        <script type="text/javascript">
+            // Script of Arms Arc Controller
+            // Collect the Arms
+            const arms = [Globals.arm1, Globals.arm2, Globals.arm3];
+
+            // Setup the min/max for the rangeSliders
+            arms.forEach((d) => {
+                document.getElementById(d.gid).min = d.minAng;
+                document.getElementById(d.gid).max = d.maxAng;
+            });
+
+            // Setup the values of rangeSliders with random value
+            randomAng = () => {
+                arms.forEach((d) => {
+                    const ang = parseInt(
+                        Math.random() * (d.maxAng - d.minAng) + d.minAng
+                    );
+                    document.getElementById(d.gid).value = ang;
+                });
+                angOnChange();
+            };
+
+            // randomAng();
+
+            // Setup the target angle for the arms
+            angOnChange = () => {
+                arms.forEach((d) => {
+                    const ang = document.getElementById(d.gid).value;
+                    d.arcTarget = arc(ang);
+                });
+            };
+
+            // angOnChange();
+            // randomAng();
+        </script>
+
+        <script type="text/javascript">
+            randomSphere = () => {
+                d3.json("example3/random").then((raw) => {
+                    console.log(raw);
+                    const s = raw.dest.split(",");
+                    const sphere = Globals.sphere;
+                    document.getElementById(sphere.namePre + "x").value = s[0];
+                    document.getElementById(sphere.namePre + "y").value = s[1];
+                    document.getElementById(sphere.namePre + "z").value = s[2];
+                    sphereOnChange();
+                });
+            };
+            sphereOnChange = () => {
+                const sphere = Globals.sphere;
+                const x = document.getElementById(sphere.namePre + "x").value;
+                const y = document.getElementById(sphere.namePre + "y").value;
+                const z = document.getElementById(sphere.namePre + "z").value;
+                console.log(x, y, z);
+                sphere.position = [x, y, z];
+
+                const content = sphere.position.join(",");
+                d3.json("example3/solve/" + content).then((raw) => {
+                    console.log(raw);
+                    const s = raw.arcs.split(",");
+                    arms[0].arcTarget = parseFloat(s[0]);
+                    document.getElementById(arms[0].gid).value = deg(s[0]);
+                    arms[1].arcTarget = parseFloat(s[1]);
+                    document.getElementById(arms[1].gid).value = deg(s[1]);
+                    arms[2].arcTarget = parseFloat(s[2]);
+                    document.getElementById(arms[2].gid).value = deg(s[2]);
+                });
+            };
+        </script>
     </body>
 </html>

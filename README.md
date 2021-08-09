@@ -23,8 +23,8 @@ The **Examples** are the Instances for practising.
 
 It is worth to mention the deployment of the examples.
 
-- The `.html` files in the templates folder, named like `example-2.html`, are the main page of the examples;
-- The example folder, named like `src-example-2`, in the `static` folder of `threeServer` contains the private files.
+-   The `.html` files in the templates folder, named like `example-2.html`, are the main page of the examples;
+-   The example folder, named like `src-example-2`, in the `static` folder of `threeServer` contains the private files.
 
 ### example-1
 
@@ -33,3 +33,7 @@ Dump Example on the homepage of the official website.
 ### example-2
 
 My own building for functional-separated structure.
+
+### example-3
+
+The 3D Building of inverse-solution for 3-axis robot arms.

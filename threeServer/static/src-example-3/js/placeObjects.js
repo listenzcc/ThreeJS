@@ -3,8 +3,13 @@
 // ! Used for Initialize the Objects
 placeObjects = (THREE) => {
     placeFloor(THREE);
-    placeArm1(THREE);
-    placeArm2(THREE);
+    placeArm(THREE, Globals.arm1);
+    placeArm(THREE, Globals.arm2);
+    placeArm(THREE, Globals.arm3);
+    placeSphere(THREE, Globals.sphere);
+
+    Globals.arm2.group.add(Globals.arm3.group);
+    Globals.arm1.group.add(Globals.arm2.group);
 };
 
 // ! Used for Render the Objects' motion,
@@ -15,15 +20,14 @@ objectsRender = () => {
 
     const arm1 = Globals.arm1;
     const arm2 = Globals.arm2;
-    arm2.group.position.set(arm1.pivot[0], arm1.pivot[1], arm1.pivot[2]);
+    const arm3 = Globals.arm3;
 
     // Arm-1
+
     if (arm1.arc < arm1.arcTarget) {
         const d = arm1.arcTarget - arm1.arc;
         const w = Math.min(d, arm1.maxOmega * delta);
         arm1.group.rotateOnWorldAxis(arm1.norm, w);
-        arm2.group.rotateOnWorldAxis(arm1.norm, w);
-        // arm2.norm.applyAxisAngle(arm1.norm, w);
         arm1.arc += w;
     }
 
@@ -31,13 +35,11 @@ objectsRender = () => {
         const d = arm1.arc - arm1.arcTarget;
         const w = Math.min(d, arm1.maxOmega * delta);
         arm1.group.rotateOnWorldAxis(arm1.norm, -w);
-        arm2.group.rotateOnWorldAxis(arm1.norm, -w);
-        // arm2.norm.applyAxisAngle(arm1.norm, -w);
         arm1.arc -= w;
     }
 
-    arm2.group.position.set(arm2.pivot[0], arm2.pivot[1], arm2.pivot[2]);
     // Arm-2
+
     if (arm2.arc < arm2.arcTarget) {
         const d = arm2.arcTarget - arm2.arc;
         const w = Math.min(d, arm2.maxOmega * delta);
@@ -52,21 +54,44 @@ objectsRender = () => {
         arm2.arc -= w;
     }
 
+    // Arm-3
+    if (arm3.arc < arm3.arcTarget) {
+        const d = arm3.arcTarget - arm3.arc;
+        const w = Math.min(d, arm3.maxOmega * delta);
+        arm3.group.rotateOnAxis(arm3.norm, w);
+        arm3.arc += w;
+    }
+
+    if (arm3.arc > arm3.arcTarget) {
+        const d = arm3.arc - arm3.arcTarget;
+        const w = Math.min(d, arm3.maxOmega * delta);
+        arm3.group.rotateOnAxis(arm3.norm, -w);
+        arm3.arc -= w;
+    }
+
+    // Update real-time report
     document.getElementById("out-ang").innerText = [
         parseInt(deg(arm1.arc)),
         parseInt(deg(arm2.arc)),
-        -1,
+        parseInt(deg(arm3.arc)),
     ].join(" | ");
 
     document.getElementById("out-angTarget").innerText = [
         parseInt(deg(arm1.arcTarget)),
         parseInt(deg(arm2.arcTarget)),
-        -1,
+        parseInt(deg(arm3.arcTarget)),
     ].join(" | ");
+
+    // Update the position of sphere
+    Globals.sphere.mesh.position.set(
+        Globals.sphere.position[0],
+        Globals.sphere.position[1],
+        Globals.sphere.position[2]
+    );
 };
 
 placeFloor = (THREE) => {
-    geometry = new THREE.BoxGeometry(30, 0.2, 30);
+    geometry = new THREE.BoxGeometry(300, 0.2, 300);
     material = new THREE.MeshPhongMaterial({
         color: 0xa0adaf,
         shininess: 50,
@@ -85,14 +110,12 @@ placeFloor = (THREE) => {
     console.log("Placed floor to scene");
 };
 
-placeArm1 = (THREE) => {
-    const arm1 = Globals.arm1;
+placeArm = (THREE, arm) => {
+    arm.norm = new THREE.Vector3(arm.norm[0], arm.norm[1], arm.norm[2]);
 
-    arm1.norm = new THREE.Vector3(arm1.norm[0], arm1.norm[1], arm1.norm[2]);
-
-    geometry = new THREE.BoxGeometry(arm1.size[0], arm1.size[1], arm1.size[2]);
+    geometry = new THREE.BoxGeometry(arm.size[0], arm.size[1], arm.size[2]);
     material = new THREE.MeshPhongMaterial({
-        color: arm1.color,
+        color: arm.color,
         shininess: 50,
         specular: 0x111111,
     });
@@ -100,31 +123,26 @@ placeArm1 = (THREE) => {
     var mesh = new THREE.Mesh(geometry, material);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
-    mesh.position.set(0, arm1.size[1] / 2, 0);
+    mesh.position.set(0, arm.size[1] / 2, 0);
 
     var group = new THREE.Group();
     group.add(mesh);
-    group.position.set(arm1.pivot[0], arm1.pivot[1], arm1.pivot[2]);
+    group.position.set(arm.pivot[0], arm.pivot[1], arm.pivot[2]);
 
-    arm1.mesh = mesh;
-    arm1.group = group;
+    arm.mesh = mesh;
+    arm.group = group;
 
     Globals.scene.add(group);
 
-    document.getElementById("inp-1").value = deg(arm1.arcTarget);
+    document.getElementById(arm.gid).value = deg(arm.arcTarget);
 
-    console.log("Placed arm1 to scene");
+    console.log("Placed", arm.name, "to scene");
 };
 
-placeArm2 = (THREE) => {
-    const arm1 = Globals.arm1;
-    const arm2 = Globals.arm2;
-
-    arm2.norm = new THREE.Vector3(arm2.norm[0], arm2.norm[1], arm2.norm[2]);
-
-    geometry = new THREE.BoxGeometry(arm2.size[0], arm2.size[1], arm2.size[2]);
+placeSphere = (THREE, sphere) => {
+    geometry = new THREE.SphereGeometry(sphere.size);
     material = new THREE.MeshPhongMaterial({
-        color: arm2.color,
+        color: sphere.color,
         shininess: 50,
         specular: 0x111111,
     });
@@ -132,18 +150,19 @@ placeArm2 = (THREE) => {
     var mesh = new THREE.Mesh(geometry, material);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
-    mesh.position.set(0, arm2.size[1] / 2, 0);
+    mesh.position.set(
+        sphere.position[0],
+        sphere.position[1],
+        sphere.position[2]
+    );
 
-    var group = new THREE.Group();
-    group.add(mesh);
-    group.position.set(arm2.pivot[0], arm2.pivot[1], arm2.pivot[2]);
+    sphere.mesh = mesh;
 
-    arm2.mesh = mesh;
-    arm2.group = group;
+    Globals.scene.add(mesh);
 
-    Globals.scene.add(group);
+    document.getElementById(sphere.namePre + "x").value = sphere.position[0];
+    document.getElementById(sphere.namePre + "y").value = sphere.position[1];
+    document.getElementById(sphere.namePre + "z").value = sphere.position[2];
 
-    document.getElementById("inp-2").value = deg(arm2.arcTarget);
-
-    console.log("Placed arm1 to scene");
+    console.log("Placed sphere to scene");
 };
