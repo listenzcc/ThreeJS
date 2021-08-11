@@ -6,6 +6,7 @@ Purpose: The Python backend of example-3
 '''
 
 # %%
+import time
 import numpy as np
 import numpy.linalg as na
 from scipy.optimize import minimize
@@ -102,6 +103,7 @@ def randomArcs():
 
 
 def solve(target):
+    t0 = time.time()
 
     def fun(x, target=target):
         pivots, vecs, norms = chain(x)
@@ -128,6 +130,8 @@ def solve(target):
 
     pivots, vecs, norms = chain(res.x)
     print(res.success, res.fun, res.x)
+
+    print('Solving costs {} seconds'.format(time.time() - t0))
 
     return res, pivots[-1]
 # %%

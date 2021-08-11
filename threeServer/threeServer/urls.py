@@ -25,4 +25,5 @@ urlpatterns = [
     path(r'example3', views.example3),
     path(r'example3/solve/<str:content>', views.example3_solve),
     path(r'example3/random', views.example3_random),
+    path(r'example4', views.example4),
 ]

@@ -5,16 +5,22 @@ from django.http import HttpResponse
 from .src.example3 import solve, randomArcs, chain
 
 
+# -----------------------------------------------
+# Example-1
 def example1(request):
     print('\nYou are requiring example-1', request, end='\n\n')
     return render(request, 'example-1.html')
 
 
+# -----------------------------------------------
+# Example-2
 def example2(request):
     print('\nYou are requiring example-2', request, end='\n\n')
     return render(request, 'example-2.html')
 
 
+# -----------------------------------------------
+# Example-3
 def example3(request):
     print('\nYou are requiring example-3', request, end='\n\n')
     return render(request, 'example-3.html')
@@ -45,3 +51,10 @@ def example3_random(request):
         dest=','.join([str(e) for e in pivots[-1]]),
     )
     return HttpResponse(json.dumps(data))
+
+
+# -----------------------------------------------
+# Example-4
+def example4(request):
+    print('\nYou are requiring example-4', request, end='\n\n')
+    return render(request, 'example-4.html')

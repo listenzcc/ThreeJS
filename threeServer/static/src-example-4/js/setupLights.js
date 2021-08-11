@@ -15,10 +15,10 @@ lightsRender = () => {
 placeDirLight = (THREE, ShadowMapViewer) => {
     var dirLight = new THREE.DirectionalLight(0x8a8a8a, 1);
     dirLight.name = "Dir. Light";
-    dirLight.position.set(0, 80, 0);
+    dirLight.position.set(0, 200, 0);
     dirLight.castShadow = true;
     dirLight.shadow.camera.near = 1;
-    dirLight.shadow.camera.far = 100;
+    dirLight.shadow.camera.far = 210;
     dirLight.shadow.camera.right = 150;
     dirLight.shadow.camera.left = -150;
     dirLight.shadow.camera.top = 150;
@@ -40,8 +40,8 @@ placeDirLight = (THREE, ShadowMapViewer) => {
 
 placeSpotLight = (THREE, ShadowMapViewer) => {
     var spotLight = new THREE.SpotLight(0xaaaaaa);
-    spotLight.position.set(30, 50, 10);
-    spotLight.angle = Math.PI / 6;
+    spotLight.position.set(100, 200, 100);
+    spotLight.angle = Math.PI / 10;
 
     spotLight.castShadow = true;
 
@@ -49,7 +49,7 @@ placeSpotLight = (THREE, ShadowMapViewer) => {
     // spotLight.shadow.mapSize.height = 20;
 
     spotLight.shadow.camera.near = 10;
-    spotLight.shadow.camera.far = 100;
+    spotLight.shadow.camera.far = 350;
 
     Globals.scene.add(spotLight);
     if (Globals.showHelp) {

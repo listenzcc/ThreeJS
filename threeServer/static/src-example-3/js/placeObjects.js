@@ -1,5 +1,60 @@
 // Place Object to the 3D Scene
 
+Globals.arm1 = {
+    mesh: undefined,
+    group: undefined,
+    color: 0xaa00a0,
+    size: [1, 10, 2],
+    norm: [0, 1, 0],
+    pivot: [0, 0, 0],
+    arc: 0,
+    arcTarget: arc(0),
+    maxOmega: Math.PI,
+    minAng: 0,
+    maxAng: 360,
+    gid: "inp-1",
+    name: "arm-1",
+};
+
+Globals.arm2 = {
+    mesh: undefined,
+    group: undefined,
+    color: 0xa0aa00,
+    size: [1, 8, 2],
+    norm: [1, 0, 0],
+    pivot: [0, 10, 0],
+    arc: 0,
+    arcTarget: arc(0),
+    maxOmega: Math.PI / 2,
+    minAng: 0,
+    maxAng: 90,
+    gid: "inp-2",
+    name: "arm-2",
+};
+
+Globals.arm3 = {
+    mesh: undefined,
+    group: undefined,
+    color: 0x00a0aa,
+    size: [1, 6, 2],
+    norm: [1, 0, 0],
+    pivot: [0, 8, 0],
+    arc: 0,
+    arcTarget: arc(0),
+    maxOmega: Math.PI / 2,
+    minAng: -90,
+    maxAng: 90,
+    gid: "inp-3",
+    name: "arm-3",
+};
+
+Globals.sphere = {
+    mesh: undefined,
+    color: 0xff0000,
+    size: 1,
+    position: [0, 30, 0],
+    namePre: "sphere-",
+};
 // ! Used for Initialize the Objects
 placeObjects = (THREE) => {
     placeFloor(THREE);

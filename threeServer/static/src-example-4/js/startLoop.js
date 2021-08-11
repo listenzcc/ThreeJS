@@ -1,11 +1,11 @@
 // Start Rendering Loop
 
-startLoop = () => {
+startLoop = (THREE) => {
     // Define an animation Loop
     function animate() {
         requestAnimationFrame(animate);
 
-        objectsRender();
+        objectsRender(THREE);
 
         // ! Render the scene BEFORE render the Lights
         // ! To prevent texture is `none`

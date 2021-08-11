@@ -5,3 +5,5 @@ arc = (deg) => {
 deg = (arc) => {
     return (arc / Math.PI) * 180;
 };
+
+rnd = Math.random;
