@@ -9,6 +9,7 @@ Purpose: The Python backend of example-3
 import time
 import numpy as np
 import numpy.linalg as na
+from tqdm.auto import tqdm
 from scipy.optimize import minimize
 
 # %%
@@ -120,13 +121,23 @@ def solve(target):
     )
 
     method = 'COBYLA'
-    res = minimize(fun, randomArcs(), method=method, constraints=cons)
-    for _ in range(10):
-        res1 = minimize(fun, randomArcs(), method=method, constraints=cons)
+    # t = time.time()
+    # aaa = [minimize(fun, randomArcs(), method=method, constraints=cons, tol=1e-3)
+    #        for e in range(10)]
+    # print(aaa, time.time()-t)
+
+    tol = 5e-2
+    res = minimize(fun, randomArcs(), method=method, constraints=cons, tol=tol)
+    for j in tqdm(range(10)):
+        res1 = minimize(fun, randomArcs(), method=method,
+                        constraints=cons, tol=tol)
         if res1.fun < res.fun:
             res = res1
-        if res.fun < 1e-3:
+        if res.fun < tol:
+            print(f'Lucky escape on {j} runs')
             break
+
+    print(f'Loss funcion is {res.fun}')
 
     pivots, vecs, norms = chain(res.x)
     print(res.success, res.fun, res.x)
