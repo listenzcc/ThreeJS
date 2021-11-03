@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-
-{% load static %}
+<!DOCTYPE html> {% load static %}
 
 <html lang="en">
     <head>
@@ -88,7 +86,7 @@
             <script type="module">
                 import * as THREE from "{% static 'node_modules/three/build/three.module.js' %}";
                 import Stats from "{% static 'node_modules/three/examples/jsm/libs/stats.module.js' %}";
-                import { OrbitControls } from "{% static 'node_modules/three/examples/jsm/controls/OrbitControls.js' %}";
+                import { OrbitControls } from "{% static 'node_modules/three/examples/jsm/controls/OrbitControls.js'%}";
                 import { ShadowMapViewer } from "{% static 'node_modules/three/examples/jsm/utils/ShadowMapViewer.js' %}";
                 quickDeploy(THREE, OrbitControls, Stats);
                 placeObjects(THREE);
@@ -144,16 +142,41 @@
                     sphereOnChange();
                 });
             };
+
+            sphereOnChange__Backup = () => {
+                const sphere = Globals.sphere;
+                const x = document.getElementById(sphere.namePre + "x").value;
+                const y = document.getElementById(sphere.namePre + "y").value;
+                const z = document.getElementById(sphere.namePre + "z").value;
+                sphere.position = [x, y, z];
+
+                const content = sphere.position.join(",");
+                console.log("The content is", content);
+                d3.json("example3/solve/" + content).then((raw) => {
+                    console.log(raw);
+                    const s = raw.arcs.split(",");
+                    arms[0].arcTarget = parseFloat(s[0]);
+                    document.getElementById(arms[0].gid).value = deg(s[0]);
+                    arms[1].arcTarget = parseFloat(s[1]);
+                    document.getElementById(arms[1].gid).value = deg(s[1]);
+                    arms[2].arcTarget = parseFloat(s[2]);
+                    document.getElementById(arms[2].gid).value = deg(s[2]);
+                });
+            };
+
             sphereOnChange = () => {
                 const sphere = Globals.sphere;
                 const x = document.getElementById(sphere.namePre + "x").value;
                 const y = document.getElementById(sphere.namePre + "y").value;
                 const z = document.getElementById(sphere.namePre + "z").value;
-                console.log(x, y, z);
                 sphere.position = [x, y, z];
 
-                const content = sphere.position.join(",");
-                d3.json("example3/solve/" + content).then((raw) => {
+                const content1 = sphere.position.join(",");
+                const content2 = arms.map((e) => e.arcTarget).join(",");
+                const content = content1 + "," + content2;
+
+                console.log("The content is", content);
+                d3.json("example3/solve_init/" + content).then((raw) => {
                     console.log(raw);
                     const s = raw.arcs.split(",");
                     arms[0].arcTarget = parseFloat(s[0]);

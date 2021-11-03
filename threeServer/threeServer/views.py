@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from .src.example3 import solve, randomArcs, chain
+from .src.example3 import solve, solve_init, randomArcs, chain
 
 
 # -----------------------------------------------
@@ -31,6 +31,24 @@ def example3_solve(request, content):
           request, content, end='\n\n')
     target = [int(e) for e in content.split(',')]
     res, dest = solve(target)
+    data = dict(
+        content=content,
+        tol=str(res.fun),
+        arcs=','.join([str(e) for e in res.x]),
+        dest=','.join([str(e) for e in dest])
+    )
+    return HttpResponse(json.dumps(data))
+
+
+def example3_solve_init(request, content):
+    print('\nYou are requiring example-3 for inverse solution with initial arcs',
+          request, content, end='\n\n')
+
+    split = [e for e in content.split(',')]
+    target = [int(e) for e in split[:3]]
+    initArcs = [float(e) for e in split[3:]]
+
+    res, dest = solve_init(target, initArcs)
     data = dict(
         content=content,
         tol=str(res.fun),

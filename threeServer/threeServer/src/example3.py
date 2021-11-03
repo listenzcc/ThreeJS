@@ -145,4 +145,47 @@ def solve(target):
     print('Solving costs {} seconds'.format(time.time() - t0))
 
     return res, pivots[-1]
+
+# %%
+
+
+def solve_init(target, initArcs):
+    t0 = time.time()
+
+    def fun(x, target=target):
+        pivots, vecs, norms = chain(x)
+        d = na.norm(pivots[-1] - target)
+        return d
+
+    cons = (
+        dict(type='ineq', fun=lambda x: x[0]),
+        dict(type='ineq', fun=lambda x: deg2arc(360) - x[0]),
+        dict(type='ineq', fun=lambda x: x[1]),
+        dict(type='ineq', fun=lambda x: deg2arc(90) - x[1]),
+        dict(type='ineq', fun=lambda x: x[2] + deg2arc(90)),
+        dict(type='ineq', fun=lambda x: deg2arc(90) - x[2]),
+    )
+
+    method = 'COBYLA'
+    method = 'trust-ncg'
+    # t = time.time()
+    # aaa = [minimize(fun, randomArcs(), method=method, constraints=cons, tol=1e-3)
+    #        for e in range(10)]
+    # print(aaa, time.time()-t)
+
+    tol = 5e-2
+    res = minimize(fun, initArcs, method=method, constraints=cons, tol=tol)
+    print(f'Loss funcion is {res.fun}')
+
+    if res.fun > tol:
+        print('------------- Failed to find minimize on initArcs')
+        a, b = solve(target)
+        return a, b
+
+    pivots, vecs, norms = chain(res.x)
+    print(res.success, res.fun, res.x)
+
+    print('Solving costs {} seconds'.format(time.time() - t0))
+
+    return res, pivots[-1]
 # %%
